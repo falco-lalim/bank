@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420">
+  <style>
+    .actor { font-family: Arial, sans-serif; font-size:13px; fill:#082a47; }
+    .lifeline { stroke:#999; stroke-dasharray:4 3; }
+    .message { stroke:#333; stroke-width:1.6; marker-end:url(#arr); }
+    .note { font-family: Arial, sans-serif; font-size:12px; fill:#222; }
+    .box { fill:#f7fbff; stroke:#2b6ea3; stroke-width:1.5; rx:6; }
+  </style>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Actors / Components -->
+  <g transform="translate(40,20)">
+    <rect class="box" x="0" y="0" width="160" height="36" />
+    <text class="actor" x="80" y="22" text-anchor="middle">Main (bank.app)</text>
+  </g>
+
+  <g transform="translate(260,20)">
+    <rect class="box" x="0" y="0" width="200" height="36" />
+    <text class="actor" x="100" y="22" text-anchor="middle">SimpleAccountService (bank.core)</text>
+  </g>
+
+  <g transform="translate(540,20)">
+    <rect class="box" x="0" y="0" width="200" height="36" />
+    <text class="actor" x="100" y="22" text-anchor="middle">AuthenticationService (bank.security)</text>
+  </g>
+
+  <g transform="translate(780,20)">
+    <rect class="box" x="0" y="0" width="200" height="36" />
+    <text class="actor" x="100" y="22" text-anchor="middle">AccountFactory / Account (providers)</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="120" x2="120" y1="80" y2="360" class="lifeline" />
+  <line x1="360" x2="360" y1="80" y2="360" class="lifeline" />
+  <line x1="640" x2="640" y1="80" y2="360" class="lifeline" />
+  <line x1="880" x2="880" y1="80" y2="360" class="lifeline" />
+
+  <!-- Messages -->
+  <!-- 1. createAccount -->
+  <line class="message" x1="140" y1="110" x2="340" y2="110" marker-end="url(#arr)" />
+  <text class="note" x="240" y="100" text-anchor="middle">createAccount(owner, type)</text>
+
+  <!-- 2. Optional: auth check -->
+  <line class="message" x1="360" y1="140" x2="640" y2="140" marker-end="url(#arr)" />
+  <text class="note" x="500" y="130" text-anchor="middle">ServiceLoader -> authorize(owner)</text>
+
+  <line class="message" x1="640" y1="170" x2="360" y2="170" marker-end="url(#arr)" />
+  <text class="note" x="500" y="160" text-anchor="middle">true / false</text>
+
+  <!-- 3. discover AccountFactory -->
+  <line class="message" x1="360" y1="200" x2="880" y2="200" marker-end="url(#arr)" />
+  <text class="note" x="620" y="190" text-anchor="middle">ServiceLoader -> find factory(type)</text>
+
+  <!-- 4. factory.create -> returns Account -->
+  <line class="message" x1="880" y1="230" x2="360" y2="230" marker-end="url(#arr)" />
+  <text class="note" x="620" y="220" text-anchor="middle">Account instance</text>
+
+  <!-- 5. deposit -->
+  <line class="message" x1="140" y1="260" x2="360" y2="260" marker-end="url(#arr)" />
+  <text class="note" x="250" y="250" text-anchor="middle">deposit(id, amount)</text>
+
+  <line class="message" x1="360" y1="290" x2="880" y2="290" marker-end="url(#arr)" />
+  <text class="note" x="620" y="280" text-anchor="middle">account.deposit(amount)</text>
+
+  <!-- 6. withdraw (may throw exception) -->
+  <line class="message" x1="140" y1="320" x2="360" y2="320" marker-end="url(#arr)" />
+  <text class="note" x="250" y="310" text-anchor="middle">withdraw(id, amount)</text>
+
+  <line class="message" x1="360" y1="350" x2="880" y2="350" marker-end="url(#arr)" />
+  <text class="note" x="620" y="340" text-anchor="middle">account.withdraw(amount) -> may throw InsufficientFundsException</text>
+
+</svg>
