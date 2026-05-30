@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <style>
+    .module { fill: #ffffff; stroke: #1f4e79; stroke-width: 2; rx:10; }
+    .module-title { font-family: 'Segoe UI', Arial, sans-serif; font-weight:700; font-size:16px; fill:#083b5c; }
+    .pkg { font-family: 'Segoe UI', Arial, sans-serif; font-size:12px; fill:#114b6b; }
+    .note { font-family: 'Segoe UI', Arial, sans-serif; font-size:12px; fill:#222; }
+    .provides { stroke:#b33; stroke-width:2; stroke-dasharray:6,4; }
+    .requires { stroke:#0b6e4f; stroke-width:2; }
+    .legend { font-family: 'Segoe UI', Arial, sans-serif; font-size:12px; }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <path d="M0,0 L12,4 L0,8 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- bank.app -->
+  <rect class="module" x="30" y="30" width="300" height="160" />
+  <text class="module-title" x="180" y="58" text-anchor="middle">bank.app</text>
+  <text class="pkg" x="50" y="80">exports: (none - uses API)</text>
+  <text class="pkg" x="50" y="100">requires: bank.api, bank.core</text>
+  <text class="pkg" x="50" y="120">uses: com.uqac.inf853.tp5.api.AccountFactory</text>
+  <text class="pkg" x="50" y="140">main: com.uqac.inf853.tp5.app.Main</text>
+
+  <!-- bank.api -->
+  <rect class="module" x="380" y="30" width="320" height="220" fill="#f5fbff" />
+  <text class="module-title" x="540" y="58" text-anchor="middle">bank.api</text>
+  <text class="pkg" x="400" y="90">exports: com.uqac.inf853.tp5.api</text>
+  <text class="pkg" x="400" y="110">interfaces:</text>
+  <text class="pkg" x="420" y="130">- Account</text>
+  <text class="pkg" x="420" y="150">- AccountService</text>
+  <text class="pkg" x="420" y="170">- AccountFactory (service)</text>
+  <text class="pkg" x="420" y="190">- AuthenticationService (service)</text>
+  <text class="pkg" x="420" y="210">- InsufficientFundsException</text>
+
+  <!-- bank.core -->
+  <rect class="module" x="780" y="10" width="360" height="220" fill="#f7fff7" />
+  <text class="module-title" x="960" y="38" text-anchor="middle">bank.core</text>
+  <text class="pkg" x="800" y="70">requires: bank.api</text>
+  <text class="pkg" x="800" y="90">exports: com.uqac.inf853.tp5.core</text>
+  <text class="pkg" x="800" y="110">provides: AccountFactory -> SimpleAccountFactory</text>
+  <text class="pkg" x="800" y="130">classes:</text>
+  <text class="pkg" x="820" y="150">- SimpleAccount (implements Account)</text>
+  <text class="pkg" x="820" y="170">- SimpleAccountFactory (implements AccountFactory)</text>
+  <text class="pkg" x="820" y="190">- SimpleAccountService (implements AccountService)</text>
+
+  <!-- bank.security -->
+  <rect class="module" x="380" y="280" width="320" height="140" fill="#fff7f5" />
+  <text class="module-title" x="540" y="308" text-anchor="middle">bank.security</text>
+  <text class="pkg" x="400" y="340">requires: bank.api</text>
+  <text class="pkg" x="400" y="360">provides: AuthenticationService -> SimpleAuthenticationService</text>
+  <text class="pkg" x="400" y="380">classes:</text>
+  <text class="pkg" x="420" y="400">- SimpleAuthenticationService</text>
+
+  <!-- bank.plugin.savings -->
+  <rect class="module" x="780" y="280" width="360" height="140" fill="#fffaf8" />
+  <text class="module-title" x="960" y="308" text-anchor="middle">bank.plugin.savings</text>
+  <text class="pkg" x="800" y="340">requires: bank.api</text>
+  <text class="pkg" x="800" y="360">provides: AccountFactory -> SavingsAccountFactory</text>
+  <text class="pkg" x="800" y="380">classes:</text>
+  <text class="pkg" x="820" y="400">- SavingsAccount (implements Account)</text>
+  <text class="pkg" x="820" y="420">- SavingsAccountFactory</text>
+
+  <!-- Arrows: bank.app -> bank.api -> bank.core -->
+  <path class="requires" d="M330 110 L380 110" marker-end="url(#arrow)" />
+  <path class="requires" d="M700 110 L780 110" marker-end="url(#arrow)" />
+
+  <!-- dashed provides lines -->
+  <path class="provides" d="M960 230 L960 280" marker-end="url(#arrow)" />
+  <text class="note" x="980" y="255">provides AccountFactory</text>
+
+  <path class="provides" d="M540 220 L540 280" marker-end="url(#arrow)" />
+  <text class="note" x="560" y="248">uses AuthenticationService</text>
+
+  <!-- module-path / providers area -->
+  <rect x="30" y="530" width="1110" height="120" rx="8" fill="#f3f3ff" stroke="#9aa6ff" />
+  <text class="legend" x="50" y="560">Module-path (runtime): bank.core.jar, bank.security.jar, bank.plugin.savings.jar, bank.app.jar</text>
+  <text class="legend" x="50" y="582">ServiceLoader discovery finds providers declared with `provides` on the module-path.</text>
+
+  <!-- Legend -->
+  <rect x="30" y="460" width="390" height="60" rx="6" fill="#fff7e6" stroke="#e6a800" />
+  <text class="legend" x="40" y="480">Legend:</text>
+  <text class="legend" x="40" y="498">- solid green arrows: module dependency (requires)</text>
+  <text class="legend" x="40" y="516">- dashed red arrows: service provider (provides / uses)</text>
+
+</svg>

@@ -1,0 +1,88 @@
+  <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <style>
+    .actor { font-family: 'Segoe UI', Arial, sans-serif; font-size:13px; fill:#082a47; }
+    .lifeline { stroke:#999; stroke-dasharray:4 3; }
+    .message { stroke:#333; stroke-width:1.6; marker-end:url(#arr); }
+    .note { font-family: 'Segoe UI', Arial, sans-serif; font-size:12px; fill:#222; }
+    .box { fill:#f7fbff; stroke:#2b6ea3; stroke-width:1.5; rx:6; }
+    .exception { fill:#fff0f0; stroke:#d33; stroke-width:1.2; rx:4; }
+  </style>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Components -->
+  <g transform="translate(40,20)">
+    <rect class="box" x="0" y="0" width="200" height="40" />
+    <text class="actor" x="100" y="26" text-anchor="middle">Main (bank.app)</text>
+    <text class="note" x="100" y="44" text-anchor="middle" font-size="11">com.uqac.inf853.tp5.app.Main</text>
+  </g>
+
+  <g transform="translate(320,20)">
+    <rect class="box" x="0" y="0" width="260" height="40" />
+    <text class="actor" x="130" y="26" text-anchor="middle">SimpleAccountService (bank.core)</text>
+    <text class="note" x="130" y="44" text-anchor="middle" font-size="11">com.uqac.inf853.tp5.core.SimpleAccountService</text>
+  </g>
+
+  <g transform="translate(700,20)">
+    <rect class="box" x="0" y="0" width="220" height="40" />
+    <text class="actor" x="110" y="26" text-anchor="middle">AuthenticationService provider</text>
+    <text class="note" x="110" y="44" text-anchor="middle" font-size="11">com.uqac.inf853.tp5.security.SimpleAuthenticationService</text>
+  </g>
+
+  <g transform="translate(980,20)">
+    <rect class="box" x="0" y="0" width="220" height="40" />
+    <text class="actor" x="110" y="26" text-anchor="middle">AccountFactory / Account</text>
+    <text class="note" x="110" y="44" text-anchor="middle" font-size="11">SimpleAccountFactory / SavingsAccountFactory</text>
+  </g>
+
+  <!-- Lifelines -->
+  <line x1="140" x2="140" y1="100" y2="520" class="lifeline" />
+  <line x1="450" x2="450" y1="100" y2="520" class="lifeline" />
+  <line x1="810" x2="810" y1="100" y2="520" class="lifeline" />
+  <line x1="1090" x2="1090" y1="100" y2="520" class="lifeline" />
+
+  <!-- Messages with details -->
+  <!-- 1: Main -> SimpleAccountService.createAccount(owner, type) -->
+  <line class="message" x1="160" y1="140" x2="450" y2="140" marker-end="url(#arr)" />
+  <text class="note" x="305" y="130" text-anchor="middle">createAccount(owner: String, type: String)</text>
+
+  <!-- 2: SimpleAccountService -> AuthenticationService (optional) -->
+  <line class="message" x1="470" y1="180" x2="810" y2="180" marker-end="url(#arr)" />
+  <text class="note" x="640" y="170" text-anchor="middle">ServiceLoader.load(AuthenticationService).authorize(owner)</text>
+
+  <line class="message" x1="810" y1="210" x2="450" y2="210" marker-end="url(#arr)" />
+  <text class="note" x="640" y="200" text-anchor="middle">boolean (true/false)</text>
+
+  <!-- 3: SimpleAccountService -> ServiceLoader(AccountFactory) -> chosen factory.create(owner) -->
+  <line class="message" x1="470" y1="250" x2="1090" y2="250" marker-end="url(#arr)" />
+  <text class="note" x="780" y="240" text-anchor="middle">ServiceLoader.load(AccountFactory): find by type</text>
+
+  <line class="message" x1="1090" y1="280" x2="470" y2="280" marker-end="url(#arr)" />
+  <text class="note" x="780" y="270" text-anchor="middle">Account account = factory.create(owner)</text>
+
+  <!-- 4: SimpleAccountService stores account and returns to Main -->
+  <line class="message" x1="450" y1="320" x2="160" y2="320" marker-end="url(#arr)" />
+  <text class="note" x="305" y="310" text-anchor="middle">return Account (id, owner)</text>
+
+  <!-- 5: deposit -->
+  <line class="message" x1="160" y1="360" x2="450" y2="360" marker-end="url(#arr)" />
+  <text class="note" x="305" y="350" text-anchor="middle">deposit(accountId, amount)</text>
+  <line class="message" x1="450" y1="390" x2="1090" y2="390" marker-end="url(#arr)" />
+  <text class="note" x="780" y="380" text-anchor="middle">Account.deposit(amount) -> updates balance</text>
+
+  <!-- 6: withdraw -->
+  <line class="message" x1="160" y1="430" x2="450" y2="430" marker-end="url(#arr)" />
+  <text class="note" x="305" y="420" text-anchor="middle">withdraw(accountId, amount)</text>
+  <line class="message" x1="450" y1="460" x2="1090" y2="460" marker-end="url(#arr)" />
+  <text class="note" x="780" y="450" text-anchor="middle">Account.withdraw(amount)</text>
+
+  <!-- Exception return -->
+  <rect class="exception" x="540" y="480" width="520" height="60" />
+  <text class="note" x="800" y="500" text-anchor="middle">Throws InsufficientFundsException if balance &lt; amount</text>
+
+</svg>
